@@ -27,6 +27,11 @@ class Tasks extends Zend_Db_Table_Abstract
 		return parent::update($data, $where);
 	}
 	
+	/**
+	 * create a task in the database if not existed yet
+	 * 
+	 * @param int $taskId
+	 */
 	public function createTask($taskId) 
 	{
 		if (!$this->isExists($taskId)) {
@@ -58,7 +63,6 @@ class Tasks extends Zend_Db_Table_Abstract
 		}
 		
 		return false;
-		
 	}
 	
 	/**

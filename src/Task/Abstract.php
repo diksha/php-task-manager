@@ -6,6 +6,13 @@ abstract class Task_Abstract {
 	
 	const TASK_ID_DATABASEBACKUP = 1;
 	
+	 /**
+     * Default Zend_Db_Adapter_Abstract object.
+     *
+     * @var Zend_Db_Adapter_Abstract
+     */
+    protected static $_defaultDb;
+	
 	/**
 	 * unique handler name
 	 * @var string
@@ -19,14 +26,45 @@ abstract class Task_Abstract {
 	protected $_taskId;
 	
 	public function __construct() 
-	{
+	{		
          // make sure the task exists
-         $modelTasks = new Tasks;
+         $modelTasks = new Tasks(array('db' => self::$_defaultDb));
 		 $modelTasks->createTask($this->_taskId);
 		
          // setup a unique id for the instance
          $this->_handle = md5(uniqid(rand(), true));
 	}
+	
+    /**
+     * Sets the default Zend_Db_Adapter_Abstract for all Tasks objects.
+     *
+     * @param  mixed $db Either an Adapter object, or a string naming a Registry key
+     * @return void
+     */
+    public static function setDefaultAdapter($db = null)
+    {
+        self::$_defaultDb = self::_setupAdapter($db);
+    }
+	
+    /**
+     * @param  mixed $db Either an Adapter object, or a string naming a Registry key
+     * @return Zend_Db_Adapter_Abstract
+     * @throws Exception
+     */
+    protected static function _setupAdapter($db)
+    {
+        if ($db === null) {
+            return null;
+        }
+        if (is_string($db)) {
+            require_once 'Zend/Registry.php';
+            $db = Zend_Registry::get($db);
+        }
+        if (!$db instanceof Zend_Db_Adapter_Abstract) {
+            throw new Exception('Argument must be of type Zend_Db_Adapter_Abstract, or a Registry key where a Zend_Db_Adapter_Abstract object is stored');
+        }
+        return $db;
+    }
 	
 	
 	/**
@@ -34,7 +72,7 @@ abstract class Task_Abstract {
 	 */
 	public function run()
 	{
-         $modelTasks = new Tasks();
+         $modelTasks = new Tasks(array('db' => self::$_defaultDb));
          $assigned = $modelTasks->assignHandler($this->_taskId, $this->_handle);
 		
          if ($assigned) {
@@ -52,7 +90,7 @@ abstract class Task_Abstract {
 	 */
 	private function release()
 	{
-         $modelTasks = new Tasks;
+         $modelTasks = new Tasks(array('db' => self::$_defaultDb));
          $data = array(
          	'handle' => null
          );

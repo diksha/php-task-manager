@@ -14,7 +14,7 @@ $db = new Zend_Db_Adapter_Pdo_Mysql(array(
     'dbname'   => 'mb2'
 ));
 
-Zend_Db_Table_Abstract::setDefaultAdapter($db);
+Task_Abstract::setDefaultAdapter($db);
 
 
 // run the task 

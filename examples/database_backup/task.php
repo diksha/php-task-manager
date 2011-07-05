@@ -10,8 +10,8 @@ require_once 'Zend/Db/Adapter/Pdo/Mysql.php';
 $db = new Zend_Db_Adapter_Pdo_Mysql(array(
     'host'     => '127.0.0.1',
     'username' => 'root',
-    'password' => 'icgweb',
-    'dbname'   => 'mb2'
+    'password' => '',
+    'dbname'   => ''
 ));
 
 Task_Abstract::setDefaultAdapter($db);
@@ -35,10 +35,6 @@ $database_options = array (
 
 $task = new Task_DatabaseBackup($s3_options, $database_options);
 $task->run();
-
-exit;
-
-
 
 
 

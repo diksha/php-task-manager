@@ -1,14 +1,18 @@
 <?php
-ini_set("include_path", ini_get("include_path") . PATH_SEPARATOR . '../src/');
+$root = realpath(dirname(dirname(__FILE__)));
+$library = "$root/../src";
+
+$path = array($library, get_include_path());
+set_include_path(implode(PATH_SEPARATOR, $path));
 
 require_once 'Tasks.php';
 require_once 'Task/Abstract.php';
 require_once 'Task/DatabaseBackup.php';
-require_once 'Zend/Db/Adapter/Pdo/Mysql.php';
+require_once 'Zend/Db/Adapter/Mysqli.php';
 
 
-$db = new Zend_Db_Adapter_Pdo_Mysql(array(
-    'host'     => '127.0.0.1',
+$db = new Zend_Db_Adapter_Mysqli(array(
+    'host'     => 'localhost',
     'username' => 'root',
     'password' => '',
     'dbname'   => ''
@@ -25,7 +29,7 @@ $s3_options = array (
 );
 
 $database_options = array (
-	'mysqldump_path' => '/Applications/XAMPP/xamppfiles/bin/',
+	'mysqldump_path' => '/usr/bin/',
 	'host'      => $config->resources->db->params->host,
     'port'      => $config->resources->db->params->port,
     'username'  => $config->resources->db->params->username,

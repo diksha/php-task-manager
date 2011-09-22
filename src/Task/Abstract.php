@@ -5,6 +5,7 @@ require_once 'Tasks.php';
 abstract class Task_Abstract {
 	
 	const TASK_ID_DATABASEBACKUP = 1;
+	const TASK_ID_TEST = 2;
 	
 	 /**
      * Default Zend_Db_Adapter_Abstract object.

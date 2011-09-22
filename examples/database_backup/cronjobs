@@ -1,4 +1,0 @@
-## Tasks
-
-
-2 50 * * * /usr/bin/php -q /PATH/TO/SCRIPT/task.php >/dev/null 2>&1
